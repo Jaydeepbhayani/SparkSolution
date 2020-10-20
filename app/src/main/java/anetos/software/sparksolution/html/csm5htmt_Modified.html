@@ -1,0 +1,185 @@
+<!-- $Header: csm5htmt.html 120.0.12010000.5 2015/06/08 07:44:55 saradhak noship $ -->
+<!--*****************************************************************************************
+    29-JUL-2014 saradhak created 
+*******************************************************************************************-->
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=yes"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Oracle Mobile Field Service</title>
+    <style>
+body{font-family:Helvetica,Arial,sans-serif}
+table.csmReport{border-collapse: collapse;background-color: #FFEDD2;border: 0px;width:100%;}
+table.csmReport th,table.csmReport  td {padding: 5px 5px;text-align: center;font-size:14px;text-align:left;word-wrap: break-word; text-shadow:none;white-space:pre-line}
+table.csmReport th{text-transform:uppercase;text-align:center; text-shadow:none;}
+table.csmReport caption{background-color:#514F33;color:white;font-size:12px;font-weight:bold;padding:5px;text-shadow:none;text-transform:uppercase;}
+table.csmReport tbody tr:nth-child(odd) {background-color: #DED68B;}
+table.csmReport.twoColumns td:first-child{width:30%}
+table {border-collapse: collapse;border: 1px solid black;} 
+th,td {border: 1px solid black;}
+table.Chettarjee {table-layout: fixed;width: 100%;}
+
+
+    </style>
+    <script>
+
+function isEmptyString(x){return typeof(x)=='undefined'||x==null || x=="" || x.length==0;}
+
+function roundReal(x){ return isEmptyString(x)?0:parseInt(Math.round(parseFloat(x)*100))/100;}
+
+function customReformat(data){
+
+ /**
+  use this api to reformat and add data and/or types as required by the UI design
+  
+  eg: To have a consolidated debrief section, we have concatenated all debrief lines into a single array object
+      and have also rounded the quantity elements to two decimal places.
+ **/
+
+ var temp=data;
+
+ temp.debriefConsolidated=temp.LABOR.concat(temp.EXPENSE).concat(temp.PARTS);
+ 
+ for(var i=0;i<temp.debriefConsolidated.length;i++)
+   temp.debriefConsolidated[i].QUANTITY=roundReal(temp.debriefConsolidated[i].QUANTITY);
+
+ console.log('custom reformat done');
+ return temp;
+}
+
+    </script>
+</head>
+
+
+<body>
+<div id="REPORT" printFormat="HTML"> <!-- id="REPORT" is important for the Print action to work -->
+    <!-- printFormat should be be "HTML" for this template-->
+    <div>
+        <!-- Company Logo & Address Section -->
+        <table width="100%" border="1" style="margin-top:10px">
+            <tbody>
+
+            <tr align="center">
+                <td><font size="5" style="font-weight:bold">Essae Teraoka Pvt. Ltd.</font></td>
+            </tr>
+            <tr align="center">
+                <td><font size="4" style="font-weight:bold">Installation / Service report</font>
+                </td>
+            </tr>
+            <tr align="center">
+                <td><font size="4" style="font-weight:bold">Customer Information</font></td>
+            </tr>
+            </tbody>
+        </table>
+
+		<!-- Customer/SR Information  -->
+        <table class="Chettarjee">
+            <tbody>
+            <tr>
+                <td>Name of the Customer</td>
+                <td><span RPT-FIELD="SR.CUSTOMER_NAME"></span></td>
+            </tr>
+            <tr>
+                <td>Complete Address</td>
+                <td><span RPT-FIELD="SR.INCIDENT_ADDRESS"></span></td>
+            </tr>
+            <tr>
+                <td>Store Code / Location ID / SOL ID :-<span RPT-FIELD="TASK.LOCATION_ID"></span>
+                </td>
+                <td>Customer Case ID :-</td>
+            </tr>
+            <tr>
+                <td>Contact Person name :-<span RPT-FIELD="SR.CONTACT_NAME"></span></td>
+                <td>Contact number :-<span RPT-FIELD="SR.CONTACT_PHONE"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table width="100%" border="1" style="margin-top:10px">
+            <tbody>
+            <tr align="center">
+                <td><font size="4" style="font-weight:bold">Service Request / Complaint
+                    Details</font></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="Chettarjee">
+            <tbody>
+
+            <tr>
+                <td>Task No :-<span RPT-FIELD="TASK.TASK_NUMBER"></span></td>
+                <td>Task Date & Time :-<span RPT-FIELD="TASK.PLANNED_START_DATE"></span></td>
+                <td>SR No :-<span RPT-FIELD="SR.INCIDENT_NUMBER"></span></td>
+            </tr>
+            <tr>
+                <td>Product Serial No :-<span RPT-FIELD="SR.CUSTOMER_PRODUCT_ID"></span></td>
+                <td colspan="2">Product Status :-</td>
+            </tr>
+            <tr>
+                <td>Item Description</td>
+                <td><span colspan="2" class="ITEM_DESCRIPTION"></span></td>
+            </tr>
+            <tr>
+                <td>SR Type :-<span RPT-FIELD="SR.CALLER_TYPE"></span></td>
+                <td>Task Type :-<span RPT-FIELD="TASK.TASK_TYPE_ID"></span></td>
+            </tr>
+            <tr>
+                <td>Problem Description</td>
+                <td><span colspan="2" class="DEBRIEF_HEADER.DEBRIEF_NUMBER"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table width="100%" border="1" style="margin-top:10px">
+            <tbody>
+            <tr align="center">
+                <td><font size="4" style="font-weight:bold">Task Details</font></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="Chettarjee">
+            <tbody>
+            <tr>
+                <td>Task Status</td>
+                <td><span class="STATUS"></span></td>
+            </tr>
+            <tr>
+                <td>Nature of Service</td>
+                <td>[Labor Reason]</td>
+            </tr>
+            <tr>
+                <td>Chettarjee - Parts Used<span RPT-FIELD="DEBRIEF_HEADER.DEBRIEF_NUMBER"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Support Required :-</td>
+            </tr>
+            <tr>
+                <td>VC No :-</td>
+                <td>VC Date :--</td>
+            </tr>
+            <tr>
+                <td>Task Closed on</td>
+            </tr>
+            <tr>
+                <td>Effort / Resolution [In Days]</td>
+            </tr>
+            <tr>
+                <td>ETPL Branch :-</td>
+            </tr>
+            <tr>
+                <td>Customer name</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--Footer Section -->
+    <hr style=" height:1px;  margin-top:6px;  margin-bottom:4px;  border-width:0;  color:black;  background-color:lightgray;">
+    <div style="font:13px bold;text-align:center;font-family:Helvetica,Cambria,sans-serif">Essae
+        Teraoka Pvt. Ltd. <br>410, 100ft Road, 4th Block, Koramangala, Bengaluru-560034</br></div>
+    <br>
+</div>
+</body>
+</html>

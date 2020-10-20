@@ -1,0 +1,4 @@
+include ':kotlin_lib'
+include ':lib'
+include ':app'
+rootProject.name = "SparkSolution"
